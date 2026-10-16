@@ -10,7 +10,7 @@ This document is the primary technical handbook for developers, evaluators, prof
 | Primary API | Express + MongoDB backend (`Backend/`) |
 | Optional sidecar | Flask `git_analyzer` (`git_analyzer/`) |
 | Demo public repo | `https://github.com/expressjs/express` |
-| Local API port (recommended) | `5061` (macOS often occupies `5000`) |
+| Local API port (recommended) | `5050` (avoid `5000` / AirPlay; avoid `5061` / Chrome `ERR_UNSAFE_PORT`) |
 | Local UI port | `3000` |
 
 ---
@@ -255,7 +255,7 @@ flowchart TB
     UI["Next.js Frontend :3000"]
   end
 
-  subgraph API["Node Backend :5061"]
+  subgraph API["Node Backend :5050"]
     Auth["Auth routes /auth"]
     Users["User/GitHub/Chat /users"]
     Analysis["Analysis /analysis"]
@@ -755,7 +755,7 @@ erDiagram
 
 ## 13. Complete API Documentation
 
-Base URL (local): `http://localhost:5061`  
+Base URL (local): `http://localhost:5050`  
 Frontend calls paths like `/auth/signup` directly on that host (not under `/api`, except health).
 
 ### Health & root
@@ -986,7 +986,7 @@ cd RepoRadar
 ```bash
 cd Backend
 cp .env.example .env
-# Edit .env: set MONGO_URI, JWT_SECRET, GROQ_API_KEY, CORS_ORIGINS, PORT=5061
+# Edit .env: set MONGO_URI, JWT_SECRET, GROQ_API_KEY, CORS_ORIGINS, PORT=5050
 npm install
 npm run dev          # nodemon
 # or
@@ -996,7 +996,7 @@ npm start            # node app.js
 Verify:
 
 ```bash
-curl http://127.0.0.1:5061/api/health
+curl http://127.0.0.1:5050/api/health
 ```
 
 ### Frontend
@@ -1004,7 +1004,7 @@ curl http://127.0.0.1:5061/api/health
 ```bash
 cd frontend
 cp .env.example .env.local
-# NEXT_PUBLIC_API_URL=http://localhost:5061
+# NEXT_PUBLIC_API_URL=http://localhost:5050
 npm install
 npm run dev          # http://localhost:3000
 # production:
@@ -1053,7 +1053,7 @@ Ensure `FLASK_ANALYZER_URL=http://127.0.0.1:5001` in Backend `.env`.
 | Variable | Required | Purpose | Example |
 |----------|----------|---------|---------|
 | `NODE_ENV` | Recommended | `development` / `production` / `test` | `development` |
-| `PORT` | Optional | HTTP port (default 5000 in code; prefer 5061 locally) | `5061` |
+| `PORT` | Optional | HTTP port (default 5000 in code; prefer 5050 locally) | `5050` |
 | `MONGO_URI` | **Yes** | Mongo connection string | `mongodb://127.0.0.1:27017/reporadar` |
 | `JWT_SECRET` | **Yes** | JWT signing secret | `long-random-string` |
 | `JWT_EXPIRES_IN` | Optional | Token lifetime | `1h` |
@@ -1075,7 +1075,7 @@ Ensure `FLASK_ANALYZER_URL=http://127.0.0.1:5001` in Backend `.env`.
 
 | Variable | Required | Purpose | Example |
 |----------|----------|---------|---------|
-| `NEXT_PUBLIC_API_URL` | Recommended | Backend origin (no trailing slash) | `http://localhost:5061` |
+| `NEXT_PUBLIC_API_URL` | Recommended | Backend origin (no trailing slash) | `http://localhost:5050` |
 
 **Never** put secrets in `NEXT_PUBLIC_*` variables.
 
@@ -1161,7 +1161,8 @@ Previously verified to succeed on **Next.js 15.5.28** (production compile). Re-r
 | Flask unavailable in health | Sidecar down **or** missing `/health` route | Start Flask; know health path mismatch |
 | 401 No token / Invalid token | Logged out or expired JWT | Log in again (`JWT_EXPIRES_IN`) |
 | Frontend cannot call API | Wrong `NEXT_PUBLIC_API_URL` / CORS | Align ports; set `CORS_ORIGINS=http://localhost:3000`; rebuild frontend after env change |
-| Port 5000 busy (macOS) | AirPlay Receiver | Use `PORT=5061` |
+| Port 5000 busy (macOS) | AirPlay Receiver | Use `PORT=5050` |
+| `net::ERR_UNSAFE_PORT` in Chrome | Port **5061** is on Chrome’s blocked list | Use API port **5050** (or another non-blocked port) and update `NEXT_PUBLIC_API_URL` |
 | 409 Analysis in progress | Duplicate job | Wait or open existing `analysisId` |
 | 403 on analysis | Wrong user | Only owner can read/delete |
 
@@ -1315,7 +1316,7 @@ Node 18+, MongoDB, Git; optional Python/Flask and Groq/GitHub tokens.
 See [§19](#19-current-limitations) — notably Groq dependency for chat, sampling limits, and JWT storage.
 
 **21. Which port should I use locally?**  
-Prefer API **5061** and UI **3000**; macOS often binds **5000**.
+Prefer API **5050** and UI **3000**; macOS often binds **5000**.
 
 **22. Can I reopen an old analysis?**  
 Yes — History → Open report → `GET /analysis/:id` as the owning user.

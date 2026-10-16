@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 /**
  * Curl-friendly smoke helper. Prefer:
- *   API_BASE=http://127.0.0.1:5061 node scripts/e2e-smoke.js
+ *   API_BASE=http://127.0.0.1:5050 node scripts/e2e-smoke.js
  * Uses Node http (not undici fetch) for broader local Node compatibility.
  */
 const http = require('http');
 const https = require('https');
 const { URL } = require('url');
 
-const BASE = process.env.API_BASE || 'http://127.0.0.1:5061';
+const BASE = process.env.API_BASE || 'http://127.0.0.1:5050';
 
 function request(method, path, { token, body } = {}) {
   const url = new URL(path, BASE);

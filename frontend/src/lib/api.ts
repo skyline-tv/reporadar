@@ -1,7 +1,7 @@
 /**
  * Backend API base URL.
- * Local:  NEXT_PUBLIC_API_URL=http://localhost:5061
- *         (port 5000 is often taken by macOS AirPlay Receiver)
+ * Local:  NEXT_PUBLIC_API_URL=http://localhost:5050
+ *         (avoid 5000 / AirPlay; avoid 5061 / Chrome ERR_UNSAFE_PORT)
  * Prod:   NEXT_PUBLIC_API_URL=https://your-backend.example.com
  *
  * Only NEXT_PUBLIC_* values are exposed to the browser.
