@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Build / cache
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+.turbo/
+
+# Analysis temp clones
+Backend/temp_repos/
+tmp/
+temp/
+
+# Logs & OS
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# IDE / coverage
+.idea/
+.vscode/
+coverage/
+.nyc_output/

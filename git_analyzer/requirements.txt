@@ -1,0 +1,6 @@
+flask[async]
+gitingest
+aiohttp 
+Flask-CORS
+python-dotenv
+gunicorn
